@@ -39,6 +39,14 @@ The LiveEvent entity will have
  - User Added to League
  - User Removed from League
 
+#### League Properties
+ - Id
+ - Created Date
+ - Users
+ - Description
+ - Invite only
+ - Closed Date
+
 # Full Application Flow
 
 ## Steps
