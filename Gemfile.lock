@@ -1,11 +1,31 @@
+PATH
+  remote: .
+  specs:
+    whats_gonna_happen (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    diff-lcs (1.3)
     mustermann (1.0.2)
     puma (3.11.2)
     rack (2.0.4)
     rack-protection (2.0.1)
       rack
+    rake (12.3.0)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+    rspec-core (3.7.1)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.1)
     sinatra (2.0.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -17,8 +37,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler
   puma
+  rake
+  rspec
   sinatra
+  whats_gonna_happen!
 
 BUNDLED WITH
    1.16.1
