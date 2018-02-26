@@ -1,11 +1,13 @@
 require 'leagues'
+require 'date'
 
 module WhatsGonnaHappen
   module Leagues
     RSpec.describe League do
+      let(:league_id) { 'godzilla_heads' }
+
       context 'users' do
         let(:first_user) { 'fake' }
-        let(:league_id) { 'godzilla_heads' }
 
         context 'adding users' do
           subject { League.new(league_id) }
@@ -40,6 +42,37 @@ module WhatsGonnaHappen
             subject.remove_user(first_user)
             expect(event_count).to eq(1)
           end
+        end
+      end
+      
+      context 'opening and closing' do
+        subject { League.new(league_id) }
+
+        let(:opened_time) { Date.new(2001,1,1) }
+        let(:closed_time) { Date.new(2001,1,1) }
+
+        it 'only generates 1 event no matter how often open is called' do
+          event_count = 0
+
+          subject.on Events::Leagues::Opened do
+            event_count += 1
+          end
+
+          subject.open(opened_time)
+          subject.open(opened_time)
+          expect(event_count).to eq(1)
+        end
+
+        it 'only generates 1 event no matter how often close is called' do
+          event_count = 0
+
+          subject.on Events::Leagues::Closed do
+            event_count += 1
+          end
+
+          subject.close(closed_time)
+          subject.close(closed_time)
+          expect(event_count).to eq(1)
         end
       end
     end

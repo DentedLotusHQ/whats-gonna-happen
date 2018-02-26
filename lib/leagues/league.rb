@@ -1,3 +1,5 @@
+require 'date'
+
 require 'entity'
 require 'events'
 
@@ -20,6 +22,10 @@ module WhatsGonnaHappen
       def initialize(id)
         @id = id
         @users = []
+        @opened_time = nil
+        @closed_time = nil
+        @public = false
+        @allows_invites = true
         on Events::Leagues::UserAdded do |event|
           apply_user_added(event)
         end
@@ -27,6 +33,35 @@ module WhatsGonnaHappen
         on Events::Leagues::UserRemoved do |event|
           apply_user_removed(event)
         end
+
+        on Events::Leagues::Opened do |event|
+          apply_opened(event)
+        end
+
+        on Events::Leagues::Closed do |event|
+          apply_closed(event)
+        end
+      end
+
+      def open(opened_time)
+        return unless @opened_time.nil?
+        event = Events::Leagues::Opened.new.tap do |e|
+          e.league_id = @id
+          e.opened_time = opened_time.to_s
+        end
+
+        publish(event)
+      end
+
+      def close(closed_time)
+        return unless @closed_time.nil?
+
+        event = Events::Leagues::Closed.new.tap do |e|
+          e.league_id = @id
+          e.closed_time = closed_time.to_s
+        end
+
+        publish(event)
       end
 
       def add_user(user_id)
@@ -48,12 +83,24 @@ module WhatsGonnaHappen
         publish(event)
       end
 
+      private
       def apply_user_added(event)
         @users.push(event.user_id)
       end
 
+      private
       def apply_user_removed(event)
         @users.delete(event.user_id)
+      end
+
+      private
+      def apply_opened(event)
+        @opened_time = Date.parse(event.opened_time)
+      end
+
+      private
+      def apply_closed(event)
+        @closed_time = Date.parse(event.closed_time)
       end
     end
   end
