@@ -104,6 +104,23 @@ module WhatsGonnaHappen
           expect(event_count).to eq(0)
         end
       end
+
+      context 'discoverable' do
+        subject { League.new(league_id) }
+
+        let(:discoverable) { true }
+
+        it 'generates event when discoverable set' do
+          event_count = 0
+
+          subject.on Events::Leagues::DiscoverableSet do
+            event_count += 1
+          end
+
+          subject.set_discoverable(discoverable)
+          expect(event_count).to eq(1)
+        end
+      end
     end
   end
 end
