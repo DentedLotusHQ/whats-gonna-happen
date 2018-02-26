@@ -8,3 +8,6 @@ require 'events/leagues/user_added'
 require 'events/leagues/user_removed'
 require 'events/leagues/invite_mode_set'
 require 'events/leagues/discoverable_set'
+
+require 'events/live_events/live_event_event'
+require 'events/live_events/event_date_set'
