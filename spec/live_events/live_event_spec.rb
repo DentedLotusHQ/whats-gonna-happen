@@ -29,6 +29,19 @@ module WhatsGonnaHappen
           expect(event_count).to eq(2)
         end
 
+        it 'initializing twice only generates 2 events' do
+          event_count = 0
+
+          subject.on Events::LiveEvents::LiveEventEvent do
+            event_count += 1
+          end
+
+          subject.initialize_event(event_date)
+          subject.initialize_event(event_date)
+
+          expect(event_count).to eq(2)
+        end
+
         it 'setting the event date generates an event' do
           event_data = nil
 
