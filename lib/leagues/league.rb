@@ -26,7 +26,7 @@ module WhatsGonnaHappen
         @users = []
         @opened_time = nil
         @closed_time = nil
-        @public_visible = false
+        @discoverable = false
         @invite_mode = InviteModes::INVITE_ONLY
         register
       end
@@ -72,7 +72,6 @@ module WhatsGonnaHappen
       end
 
       def set_invite_mode(invite_mode)
-        puts invite_mode
         return unless InviteModes::ALL.any? do |im|
           im == invite_mode
         end
@@ -80,6 +79,15 @@ module WhatsGonnaHappen
         event = Events::Leagues::InviteModeSet.new.tap do |e|
           e.league_id = @id
           e.invite_mode = invite_mode.to_s
+        end
+
+        publish(event)
+      end
+
+      def set_discoverable(discoverable)
+        event = Events::Leagues::DiscoverableSet.new.tap do |e|
+          e.league_id = @id
+          e.discoverable = discoverable
         end
 
         publish(event)
