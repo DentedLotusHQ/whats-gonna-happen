@@ -24,6 +24,7 @@ module WhatsGonnaHappen
       def initialize(id)
         @id = id
         @users = []
+        @live_events = []
         @opened_time = nil
         @closed_time = nil
         @discoverable = false
@@ -93,7 +94,19 @@ module WhatsGonnaHappen
         publish(event)
       end
 
+      def associate_live_event(live_event_id)
+        return if @live_events.any? { |le| le == live_event_id }
+
+        event = Events::Leagues::LiveEventAdded.new.tap do |e|
+          e.league_id = @id
+          e.live_event_id = live_event_id
+        end
+
+        publish(event)
+      end
+
       private
+
       def register
         on Events::Leagues::UserAdded do |event|
           apply_user_added(event)
@@ -117,28 +130,39 @@ module WhatsGonnaHappen
       end
 
       private
+
       def apply_user_added(event)
         @users.push(event.user_id)
       end
 
       private
+
       def apply_user_removed(event)
         @users.delete(event.user_id)
       end
 
       private
+
       def apply_opened(event)
         @opened_time = Date.parse(event.opened_time)
       end
 
       private
+
       def apply_closed(event)
         @closed_time = Date.parse(event.closed_time)
       end
 
       private
+
       def apply_invite_mode_set(event)
         @invite_mode = event.invite_mode
+      end
+
+      private
+
+      def apply_live_event_added(event)
+        @live_events.push(event.live_event_id)
       end
     end
   end

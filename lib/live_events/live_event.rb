@@ -57,6 +57,7 @@ module WhatsGonnaHappen
       end
 
       private
+
       def register
         on Events::LiveEvents::EventDateSet do |event|
           apply_event_date_set(event)
@@ -68,11 +69,13 @@ module WhatsGonnaHappen
       end
 
       private
+
       def apply_event_date_set(event)
         @event_date = Date.parse(event.event_date)
       end
 
       private
+
       def apply_created(event)
         @created_date = Date.parse(event.created_date)
       end
