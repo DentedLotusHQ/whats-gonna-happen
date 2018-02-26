@@ -75,6 +75,35 @@ module WhatsGonnaHappen
           expect(event_count).to eq(1)
         end
       end
+
+      context 'invite mode' do
+        subject { League.new(league_id) }
+
+        let(:invite_mode) { Leagues::InviteModes::PUBLIC }
+        let(:bad_invite_mode) { :totally_real_mode }
+
+        it 'generates events when invite mode is set' do
+          event_count = 0
+
+          subject.on Events::Leagues::InviteModeSet do
+            event_count += 1
+          end
+
+          subject.set_invite_mode(invite_mode)
+          expect(event_count).to eq(1)
+        end
+
+        it 'does not generate an event with wrong invite mode' do
+          event_count = 0
+
+          subject.on Events::Leagues::InviteModeSet do
+            event_count += 1
+          end
+
+          subject.set_invite_mode(bad_invite_mode)
+          expect(event_count).to eq(0)
+        end
+      end
     end
   end
 end
