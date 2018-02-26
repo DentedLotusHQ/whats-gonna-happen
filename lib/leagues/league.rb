@@ -3,6 +3,8 @@ require 'date'
 require 'entity'
 require 'events'
 
+require_relative 'invite_modes'
+
 module WhatsGonnaHappen
   module Leagues
     class League
@@ -24,23 +26,9 @@ module WhatsGonnaHappen
         @users = []
         @opened_time = nil
         @closed_time = nil
-        @public = false
-        @allows_invites = true
-        on Events::Leagues::UserAdded do |event|
-          apply_user_added(event)
-        end
-
-        on Events::Leagues::UserRemoved do |event|
-          apply_user_removed(event)
-        end
-
-        on Events::Leagues::Opened do |event|
-          apply_opened(event)
-        end
-
-        on Events::Leagues::Closed do |event|
-          apply_closed(event)
-        end
+        @public_visible = false
+        @invite_mode = InviteModes::INVITE_ONLY
+        register
       end
 
       def open(opened_time)
@@ -83,6 +71,43 @@ module WhatsGonnaHappen
         publish(event)
       end
 
+      def set_invite_mode(invite_mode)
+        puts invite_mode
+        return unless InviteModes::ALL.any? do |im|
+          im == invite_mode
+        end
+
+        event = Events::Leagues::InviteModeSet.new.tap do |e|
+          e.league_id = @id
+          e.invite_mode = invite_mode.to_s
+        end
+
+        publish(event)
+      end
+
+      private
+      def register
+        on Events::Leagues::UserAdded do |event|
+          apply_user_added(event)
+        end
+
+        on Events::Leagues::UserRemoved do |event|
+          apply_user_removed(event)
+        end
+
+        on Events::Leagues::Opened do |event|
+          apply_opened(event)
+        end
+
+        on Events::Leagues::Closed do |event|
+          apply_closed(event)
+        end
+
+        on Events::Leagues::InviteModeSet do |event|
+          apply_invite_mode_set(event)
+        end
+      end
+
       private
       def apply_user_added(event)
         @users.push(event.user_id)
@@ -101,6 +126,11 @@ module WhatsGonnaHappen
       private
       def apply_closed(event)
         @closed_time = Date.parse(event.closed_time)
+      end
+
+      private
+      def apply_invite_mode_set(event)
+        @invite_mode = event.invite_mode
       end
     end
   end
