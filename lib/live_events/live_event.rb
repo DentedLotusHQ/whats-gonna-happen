@@ -7,6 +7,7 @@ module WhatsGonnaHappen
 
       def initialize(id)
         @id = id
+        @user_id = nil
         @event_date = nil
         @created_date = nil
         @open_date = nil
@@ -15,10 +16,11 @@ module WhatsGonnaHappen
         register
       end
 
-      def initialize_event(created_date, open_date = nil)
+      def initialize_event(user_id, created_date, open_date = nil)
         return unless @created_date.nil?
         event = Events::LiveEvents::Created.new.tap do |e|
           e.created_date = created_date.to_s
+          e.user_id = user_id
         end
 
         publish(event)
@@ -78,6 +80,7 @@ module WhatsGonnaHappen
 
       def apply_created(event)
         @created_date = Date.parse(event.created_date)
+        @user = event.user_id
       end
     end
   end
