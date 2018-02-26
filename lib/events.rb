@@ -10,4 +10,7 @@ require 'events/leagues/invite_mode_set'
 require 'events/leagues/discoverable_set'
 
 require 'events/live_events/live_event_event'
+require 'events/live_events/created'
+require 'events/live_events/close_date_set'
+require 'events/live_events/open_date_set'
 require 'events/live_events/event_date_set'
