@@ -6,6 +6,7 @@ module WhatsGonnaHappen
   module LiveEvents
     RSpec.describe LiveEvent do
       let(:live_event_id) { 'fight_night' }
+      let(:user_id) { 'fake' }
       context 'basic creation' do
         subject { LiveEvent.new(live_event_id) }
         it 'can create a live event' do
@@ -24,7 +25,7 @@ module WhatsGonnaHappen
             event_count += 1
           end
 
-          subject.initialize_event(event_date)
+          subject.create(user_id, event_date)
 
           expect(event_count).to eq(2)
         end
@@ -36,8 +37,8 @@ module WhatsGonnaHappen
             event_count += 1
           end
 
-          subject.initialize_event(event_date)
-          subject.initialize_event(event_date)
+          subject.create(user_id, event_date)
+          subject.create(user_id, event_date)
 
           expect(event_count).to eq(2)
         end

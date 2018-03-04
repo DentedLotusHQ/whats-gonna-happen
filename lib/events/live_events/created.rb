@@ -3,6 +3,7 @@ module WhatsGonnaHappen
     module LiveEvents
       class Created < LiveEventEvent
         attr_accessor :created_date
+        attr_accessor :user_id
       end
     end
   end
