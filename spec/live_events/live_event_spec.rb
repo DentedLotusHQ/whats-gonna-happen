@@ -25,7 +25,7 @@ module WhatsGonnaHappen
             event_count += 1
           end
 
-          subject.initialize_event(user_id, event_date)
+          subject.create(user_id, event_date)
 
           expect(event_count).to eq(2)
         end
@@ -37,8 +37,8 @@ module WhatsGonnaHappen
             event_count += 1
           end
 
-          subject.initialize_event(user_id, event_date)
-          subject.initialize_event(user_id, event_date)
+          subject.create(user_id, event_date)
+          subject.create(user_id, event_date)
 
           expect(event_count).to eq(2)
         end
