@@ -9,6 +9,27 @@ module WhatsGonnaHappen
       context 'users' do
         let(:first_user) { 'fake' }
 
+        context 'on and off' do
+          subject { League.new(league_id) }
+
+          it 'returns a token with on' do
+            token = subject.on Events::Event do
+            end
+            expect(token).to be
+          end
+
+          it 'can unsubscribe' do
+            called = false
+            token = subject.on Events::Event do
+              called = true
+            end
+
+            subject.off(Events::Event, token)
+            subject.add_user(first_user)
+            expect(called).to eq(false)
+          end
+        end
+
         context 'adding users' do
           subject { League.new(league_id) }
           it 'only generates 1 event when same user added twice' do
@@ -16,10 +37,10 @@ module WhatsGonnaHappen
             subject.on Events::Leagues::UserAdded do |event|
               event_count += 1
             end
-  
+
             subject.add_user(first_user)
             subject.add_user(first_user)
-  
+
             expect(event_count).to eq(1)
           end
         end
@@ -44,12 +65,12 @@ module WhatsGonnaHappen
           end
         end
       end
-      
+
       context 'opening and closing' do
         subject { League.new(league_id) }
 
-        let(:opened_time) { Date.new(2001,1,1) }
-        let(:closed_time) { Date.new(2001,1,1) }
+        let(:opened_time) { Date.new(2001, 1, 1) }
+        let(:closed_time) { Date.new(2001, 1, 1) }
 
         it 'only generates 1 event no matter how often open is called' do
           event_count = 0
