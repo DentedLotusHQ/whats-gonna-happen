@@ -1,5 +1,4 @@
 require 'events/event'
-require 'events/event_store'
 
 require 'events/leagues/league_event'
 require 'events/leagues/opened'
@@ -21,7 +20,7 @@ require 'events/live_events/prediction_finalized'
 require 'events/live_events/prediction_removed'
 require 'events/live_events/prediction_updated'
 
-require 'events/user_picks/user_pick_event'
+require 'events/user_picks/user_picks_event'
 require 'events/user_picks/pick_group_added'
 require 'events/user_picks/pick_group_removed'
 require 'events/user_picks/pick_group_updated'

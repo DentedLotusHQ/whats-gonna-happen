@@ -116,7 +116,7 @@ module WhatsGonnaHappen
       end
 
       def apply_close_date_set(event)
-        @close_date = Date.parse(event.closed_date)
+        @close_date = Date.parse(event.close_date)
       end
 
       def apply_prediction_added(event)
